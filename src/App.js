@@ -1,8 +1,7 @@
 import React, { Component } from "react";
-import "./App.css";
 
 /*
-Use React and the data below to display a list of users alongside their favorite movies.
+Display a list of movies where each movie contains a list of users that favorited it.
 
 For detailed instructions, refer to instructions.md.
 */
@@ -43,7 +42,7 @@ const profiles = [
 const users = {
   1: {
     id: 1,
-    name: "Jane Cruz",
+    name: "Jane Jones",
     userName: "coder",
   },
   2: {
@@ -57,7 +56,7 @@ const users = {
     userName: "user123",
   },
   4: {
-    id: 4,
+    id: 3,
     name: "John Doe",
     userName: "user123",
   },
@@ -76,7 +75,7 @@ const users = {
 const movies = {
   1: {
     id: 1,
-    name: "Planet Earth 1",
+    name: "Planet Earth",
   },
   2: {
     id: 2,
@@ -99,19 +98,35 @@ const movies = {
 class App extends Component {
   render() {
     return (
-      <div>
-        <ul>
-          <h2>My Favorite Movie</h2>
-          {profiles.map((profile) => {
-            const user = users[profile.userID].name;
-            const favoriteMovieName = movies[profile.favoriteMovieID].name;
-            return (
-              <li key={profile.userID}>
-                {`${user} favorite movie is ${favoriteMovieName}`}
-              </li>
-            );
-          })}
-        </ul>
+      <div className="App">
+        <header className="App-header">
+          <h1 className="App-title">ReactND - Coding Practice</h1>
+        </header>
+        <h2>How Popular is Your Favorite Movie?</h2>
+        {Object.keys(movies)
+          .map((movieId) => ({
+            movieName: movies[movieId].name,
+            usersList: profiles
+              .filter((profile) => profile.favoriteMovieID === movieId)
+              .map((profile) => users[profile.userID].name),
+          }))
+          .map((FMovie) => (
+            <div>
+              <h2>{FMovie.movieName}</h2>
+              {FMovie.usersList.length !== 0 ? (
+                <div>
+                  <p>Liked By:</p>
+                  <ul>
+                    {FMovie.usersList.map((user) => (
+                      <li>{user}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : (
+                <p>None of the current users liked this movie</p>
+              )}
+            </div>
+          ))}
       </div>
     );
   }
